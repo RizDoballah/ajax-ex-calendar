@@ -1,20 +1,44 @@
 $(document).ready(function() {
 
-var thisMonth = 0;
-var year = 2018;
-var monthObject = moment(
-  {
-    year: year,
-    month:thisMonth
-  }
-);
-printMonth(monthObject);
-printHoliday(monthObject);
+  var thisMonth = 2;
+  var year = 2018;
+  var monthObject = moment(
+    {
+      year: year,
+      month:thisMonth
+    }
+  );
+  printMonth(monthObject);
+  printHoliday(monthObject);
 
-});
+  $('.next').click(function() {
+    var currentMonth = $('h3').attr('data-current-month');
+    console.log(currentMonth);
+    var nextMonth = moment(currentMonth).add(1, 'M');
+    console.log(nextMonth);
+
+    printMonth(nextMonth);
+    printHoliday(nextMonth);
+
+  });
+
+  $('.previous').click(function () {
+    var currentMonth = $('h3').attr('data-current-month');
+    console.log(currentMonth);
+    var previousMonth = moment(currentMonth).subtract(1, 'months');
+    console.log(previousMonth);
+
+
+    printMonth(previousMonth);
+    printHoliday(previousMonth);
+  });
+  });
 
 // Function-----------------------
 function printMonth(month) {
+  $('.days').html('');
+  $('h3').text(month.format('MMMM YYYY'));
+  $('h3').attr('data-current-month', month.format('YYYY-MM'));
   var daysInMonth = month.daysInMonth();
   for (var i = 1; i <= daysInMonth; i++) {
     // console.log(i);
@@ -41,29 +65,25 @@ function printHoliday(month) {
     },
     success: function (data) {
       var holidays = data.response;
-      console.log(holidays);
       for (var i = 0; i < holidays.length; i++) {
         var holiday = holidays[i].date;
         console.log(holiday);
-        $('.day').each(function () {
+        $('.day').each(function() {
           console.log($(this).attr('data-date'));
-          if ($(this).attr('data-date') == holiday) {
-            console.log($(this));
-          $(this).addClass('red');
-          $(this).find('.holiday-name').append(holidays[i].name);
-
+          if(holiday == $(this).attr('data-date')) {
+            $(this).addClass('red');
+            $(this).find('.holiday-name').append(holidays[i].name);
           }
         });
-      }
-
-    },
+    }
+  },
     error : function (request, state, errors) {
       alert('Errore ' + errors);
     }
 
   });
+}
 
-};
 
 function addZero(num) {
   if(num < 10) {
