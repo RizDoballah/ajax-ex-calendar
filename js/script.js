@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
   var thisMonth = 2;
   var year = 2018;
   var monthObject = moment(
@@ -16,9 +15,16 @@ $(document).ready(function() {
     console.log(currentMonth);
     var nextMonth = moment(currentMonth).add(1, 'M');
     console.log(nextMonth);
-
+    var invalid = moment(currentMonth).month();
+    console.log(invalid);
+    if (invalid > 11) {
+    alert('Ivalid date');
+  } else {
     printMonth(nextMonth);
     printHoliday(nextMonth);
+
+  }
+
 
   });
 
@@ -27,16 +33,21 @@ $(document).ready(function() {
     console.log(currentMonth);
     var previousMonth = moment(currentMonth).subtract(1, 'months');
     console.log(previousMonth);
-
-
+    var invalid = moment(currentMonth).month();
+    if (invalid < 0) {
+    alert('Ivalid date');
+  }else {
     printMonth(previousMonth);
     printHoliday(previousMonth);
+  }
+
+
   });
-  });
+});
 
 // Function-----------------------
 function printMonth(month) {
-  $('.days').html('');
+  $('.calendar').html('');
   $('h3').text(month.format('MMMM YYYY'));
   $('h3').attr('data-current-month', month.format('YYYY-MM'));
   var daysInMonth = month.daysInMonth();
@@ -66,16 +77,17 @@ function printHoliday(month) {
     success: function (data) {
       var holidays = data.response;
       for (var i = 0; i < holidays.length; i++) {
+        console.log(holidays[i].name);
         var holiday = holidays[i].date;
         console.log(holiday);
+        }
         $('.day').each(function() {
-          console.log($(this).attr('data-date'));
+          // console.log($(this).attr('data-date'));
           if(holiday == $(this).attr('data-date')) {
             $(this).addClass('red');
             $(this).find('.holiday-name').append(holidays[i].name);
           }
         });
-    }
   },
     error : function (request, state, errors) {
       alert('Errore ' + errors);
