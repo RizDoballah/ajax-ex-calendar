@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  var thisMonth = 2;
+  var thisMonth = 1;
   var year = 2018;
   var monthObject = moment(
     {
@@ -15,17 +15,17 @@ $(document).ready(function() {
     console.log(currentMonth);
     var nextMonth = moment(currentMonth).add(1, 'M');
     console.log(nextMonth);
-    var invalid = moment(currentMonth).month();
-    console.log(invalid);
-    if (invalid > 11) {
-    alert('Ivalid date');
-  } else {
+    var invalidMonth = moment(nextMonth).month();
+    console.log(invalidMonth);
+    if (invalidMonth == 11) {
+      $('.next').click(function() {
+        alert('Invalid date');
+        $('.calendar').html('');
+      });
+    }
+
     printMonth(nextMonth);
     printHoliday(nextMonth);
-
-  }
-
-
   });
 
   $('.previous').click(function () {
@@ -33,18 +33,20 @@ $(document).ready(function() {
     console.log(currentMonth);
     var previousMonth = moment(currentMonth).subtract(1, 'months');
     console.log(previousMonth);
-    var invalid = moment(currentMonth).month();
-    if (invalid < 0) {
-    alert('Ivalid date');
-  }else {
-    printMonth(previousMonth);
-    printHoliday(previousMonth);
-  }
+    var invalidMonth = moment(previousMonth).month();
+    console.log(invalidMonth);
+    if (invalidMonth == 0) {
+      $('.previous').click(function() {
+        alert('Invalid date');
+        $('.calendar').html('');
+      });
+    }
 
+      printMonth(previousMonth);
+      printHoliday(previousMonth);
 
   });
 });
-
 // Function-----------------------
 function printMonth(month) {
   $('.calendar').html('');
@@ -80,7 +82,6 @@ function printHoliday(month) {
         console.log(holidays[i].name);
         var holiday = holidays[i].date;
         console.log(holiday);
-        }
         $('.day').each(function() {
           // console.log($(this).attr('data-date'));
           if(holiday == $(this).attr('data-date')) {
@@ -88,6 +89,7 @@ function printHoliday(month) {
             $(this).find('.holiday-name').append(holidays[i].name);
           }
         });
+      }
   },
     error : function (request, state, errors) {
       alert('Errore ' + errors);
