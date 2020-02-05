@@ -1,5 +1,9 @@
 $(document).ready(function() {
-  var thisMonth = 1;
+  for (var i = 0; i < 35; i++) {
+    var box = $('.template .box').clone();
+    $('.row').append(box)
+  }
+  var thisMonth = 2;
   var year = 2018;
   var monthObject = moment(
     {
@@ -47,6 +51,7 @@ $(document).ready(function() {
 
   });
 });
+
 // Function-----------------------
 function printMonth(month) {
   $('.calendar').html('');
@@ -59,7 +64,7 @@ function printMonth(month) {
     var template = Handlebars.compile(source);
     var context = {
         number: i,
-        month: month.format('MMMM'),
+        // month: month.format('MMMM'),
         date: month.format('YYYY-MM') + '-' + addZero(i)
         };
     var html = template(context);
@@ -87,6 +92,10 @@ function printHoliday(month) {
           if(holiday == $(this).attr('data-date')) {
             $(this).addClass('red');
             $(this).find('.holiday-name').append(holidays[i].name);
+            $(this).on('click', function() {
+              $('.holiday-name').toggle();
+            });
+
           }
         });
       }
